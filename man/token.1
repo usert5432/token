@@ -1,0 +1,411 @@
+.TH TOKEN 1 token-VERSION
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\" Section:NAME
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.SH NAME
+token \- A command line token reward system manager.
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\" Section:SYNOPSIS
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.SH SYNOPSIS
+.P
+.B token
+.RB [ OPTION... ]
+.B COMMAND
+.RB [ ARGUMENT... ]
+.P
+.B token
+.BR \-h | \-\-help
+.P
+.B token \-\-version
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\" Section:DESCRIPTION
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.SH DESCRIPTION
+.B token
+is a command line token reward system manager to combat procrastination.
+If you are not familiar with token reward system concepts please refer to the
+section
+.B TOKEN REWARD SYSTEM
+below.
+.P
+.B token
+allows users to add, delete, list token rewards (also simply referred as
+.I tokens
+in this manual page), make graphical representations of them and plot history
+of past tokens to track progress.
+.B token
+requires each token to have a short description, a reward value in range
+[1-10] and a date when this token reward was given.
+.P
+.B token
+stores token rewards in plain text files under
+.I ~/.token
+directory (by default). Token rewards are stored in pages of 200 tokens each
+(by default). Once one token page is filled a new one is started.
+.B token
+behavior can be controlled by modifying its configuration file
+.IR ~/.tokenrc .
+Details of the configuration file format can be found in the
+.B CONFIGURATION FILE
+section of this manual page.
+.P
+If you are looking for a quick way to get started with
+.B token
+please refer to the section
+.B EXAMPLES
+below.
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\" Section:COMMANDS
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.SH COMMANDS
+This section lists token management commands that
+.B token
+supports. Each command may accept multiple arguments. Only arguments that are
+specific to a given command will be described in this section. Arguments that
+are common among multiple commands will be described in the
+.B OPTIONS
+section below.
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.P
+.B add
+.RB [ \-p
+.IR PAGE ]
+.RB [ \-d
+.IR DATE ]
+.RB [ \-m
+.IR META ]
+.BI \-r " REWARD"
+.I DESCRIPTION...
+.RS
+Add a new token with description
+.IR DESCRIPTION... .
+Arguments:
+.TP
+.BR \-r ", " \-\-reward " " \fIREWARD\fR
+Token reward value. Must be in range [1-10].
+.TP
+.BR \-d ", " \-\-date " " \fIDATE\fR
+Date and time of the token reward. Expected formats are
+.IR YYYY-MM-DD " or " YYYY-MM-DDThh:mm:ss " or " YYYY-MM-DDThh:mm:sszzz .
+If this argument is omitted then the current datetime is used as a reward time.
+.TP
+.BR \-m ", " \-\-meta " " \fIMETA\fR
+Optional metainformation associated with the token. No restriction is placed on
+its form.
+.RE
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.P
+.B del
+.RB [ \-p
+.IR PAGE ]
+.RB [ \-\- ]
+.I ID
+.RS
+Remove token. The
+.I ID
+argument specifies the token to remove. The negative
+.I ID
+is interpreted as counting from the back. Additionally, a special syntax for
+.I ID
+field is supported -
+.I PAGE.ID
+where
+.I PAGE
+specifies the page number of the token
+.IR ID .
+.RE
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.P
+.B export
+.RB [ \-p
+.IR PAGE ]
+.RB [ \-f
+.IR FORMAT ]
+.RS
+Export tokens to an external format. Arguments:
+.TP
+.BR \-f ", " \-\-format " " \fIFORMAT\fR
+Export format name. Supported formats:
+.IR json .
+.RE
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.P
+.B graph
+.RB [ \-p
+.IR PAGE ]
+.RB [ \-c
+.IR COLOR ]
+.RI [ FILTER ]
+.RB [ \-\-before
+.IR DATE ]
+.RB [ \-\-after
+.IR DATE ]
+.RB [ \-\-mode
+.IR MODE ]
+.RB [ \-\-value ]
+.RS
+Make a histogram of tokens vs date. If
+.I FILTER
+is specified then only tokens with descriptions matching
+.I FILTER
+will be plotted. Arguments:
+.TP
+.BI \-\-after " DATE"
+Only plot tokens earned after
+.IR DATE .
+.TP
+.BI \-\-before " DATE"
+Only plot tokens earned before
+.IR DATE .
+.TP
+.BI \-\-mode " MODE"
+Histogram binning mode. Supported modes:
+.IR day ", " week ", " month ", " year .
+If mode is omitted then token histogram will have one bin per day.
+.TP
+.B \-\-value
+Controls histogram values. If
+.B \-\-value
+is omitted then the histogram of number of tokens per bin will be made.
+Otherwise a histogram of total token rewards per bin will be made.
+.RE
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.P
+.B info
+.RB [ \-p
+.IR PAGE ]
+.RB [ \-c
+.IR COLOR ]
+.RB [ \-\- ]
+.I ID
+.RS
+Show detailed information about a token specified by
+.IR ID .
+Please refer to the
+.B del
+subcommand manual for the description of the
+.I ID
+argument.
+.RE
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.P
+.B list
+.RB [ \-p
+.IR PAGE ]
+.RB [ \-c
+.IR COLOR ]
+.RI [ FILTER ]
+.RB [ \-\-before
+.IR DATE ]
+.RB [ \-\-after
+.IR DATE ]
+.RB [ \-l
+.IR LIMIT ]
+.RB [ \-o
+.IR OFFSET ]
+.RS
+Show a list of earned tokens. If
+.I FILTER
+is specified then only tokens with descriptions matching
+.I FILTER
+will be listed. Arguments:
+.TP
+.BI \-\-after " DATE"
+Only list tokens earned after
+.IR DATE .
+.TP
+.BI \-\-before " DATE"
+Only list tokens earned before
+.IR DATE .
+.TP
+.BR \-l ", " \-\-limit " " \fILIMIT\fR
+Limit number of listed tokens to
+.IR LIMIT .
+If
+.I LIMIT
+is 0 then all tokens will be listed. If
+.I LIMIT
+is -1 then the list height will be set to the screen height.
+.TP
+.BR \-o ", " \-\-offset " " \fIOFFSET\fR
+Number of the first token to be listed. If
+.I OFFSET
+is 0, then the last
+.I LIMIT
+tokens will be listed.
+.RE
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.P
+.B itable
+.RB [ \-p
+.IR PAGE ]
+.RB [ \-c
+.IR COLOR ]
+.RB [ \-s
+.IR SUBPAGE ]
+.RS
+Print a table (grid) of tokens for a page
+.IR PAGE .
+Each token will be represented as an icon (ASCII "art" object) depending on its
+reward value. Arguments:
+.TP
+.BR \-s ", " \-\-subpage " " \fISUBPAGE\fR
+The number of tokens in a single page
+.I PAGE
+may be too large to be printed on single terminal screen. In this case, tokens
+on
+.I PAGE
+will be grouped into subpages of fixed size such that each subpage will fit
+the terminal screen. The
+.I SUBPAGE
+argument controls which subpage will be printed. If
+.I SUBPAGE
+is 0, then the last subpage that has tokens will be printed (default).
+.RE
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.P
+.B table
+.RB [ \-p
+.IR PAGE ]
+.RB [ \-c
+.IR COLOR ]
+.RB [ \-s
+.IR SUBPAGE ]
+.RS
+Print a table (grid) of tokens for a page
+.IR PAGE .
+Each token will be represented as a cell in the grid, showing reward value,
+date earned and its description. Please refer to the
+.B itable
+command for the description of command arguments.
+.RE
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\" Section:OPTIONS
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.SH OPTIONS
+.TP
+.BR \-h ", " \-\-help
+Print usage and exit.
+.TP
+.B \-\-version
+Print version and exit.
+.TP
+.BR \-p ", " \-\-page " " \fIPAGE\fR
+Token page number. The negative page numbers are interpreted as counting from
+the back. The interpretation of the special page number 0 depends on the
+command. For
+.BR graph " and " list
+commands the 0 page number means use all pages. For the remaining commands the
+0s page refers to the last page.
+.TP
+.BR \-c ", " \-\-color " " \fICOLOR\fR
+Output colorization mode. Supported modes:
+.IR on ", " off ", " auto .
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\" Section:CONFIGURATION FILE
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.SH CONFIGURATION FILE
+The
+.B token
+configuration is stored in the
+.I ~/.tokenrc
+configuration file. The configuration file has a simple ini like syntax where
+every line is name/value pair:
+.nf
+.RS
+.P
+name = "value"
+.RE
+.fi
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.P
+The configuration parameters are described below:
+.TP
+.BR tokenDir " = " \fITOKEN_DIRECTORY\fR
+Directory where token pages will be stored.
+.TP
+.BR pageSize " = " \fIPAGE_SIZE\fR
+Number of tokens in one token page.
+.TP
+.BR color.reward.N " = " \fICOLOR\fR
+Color specification for the tokens with reward N, where N is in range [1-10].
+See color specification format below.
+.TP
+.BR color.altN " = " \fICOLOR\fR
+Background color (N in range [1,2]) specification. Even lines of the list
+report will have background specified by
+.B color.alt0
+and odd lines will have background specified by
+.BR color.alt1 .
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.P
+Each color specification has the following format:
+.RS
+.IR COLOR " = \(dq[" STYLE "] [" FG_COLOR "] [\fBon\fR " BG_COLOR ]\(dq
+.RE
+where
+.RS
+.BR \fISTYLE\fR " = (" bright | dim | italic | underscore | blink | \c
+.BR reverse | hidden | strikethrough ") [" \fISTYLE\fR ]
+.RE
+and
+.IR FG_COLOR ", " BG_COLOR
+can be either a color name (e.g.
+.IR red ", " green ", etc)"
+or a hex color specification
+.IR #RRGGBB .
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\" Section:TOKEN REWARD SYSTEM
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.SH TOKEN REWARD SYSTEM
+Token reward system is a system to reinforce desirable behavior by rewarding it
+with token rewards. In essence, after you perform a difficult/unpleasant task
+add a token with reward value proportional to the subjective unpleasantness of
+the task. Rewarding the task completion with tokens can be perceived as
+pleasant by your brain and will start reinforcement learning. It will also help
+to stay focused on the task and keep track of its progress. You can find more
+information about the Token Reward System online.
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\" Section:EXAMPLES
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.SH EXAMPLES
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.B Add a new token
+.nf
+.RS
+$ token add install token application --reward 5
+.RE
+.fi
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.P
+.B List all tokens
+.nf
+.RS
+$ token list
+.RE
+.fi
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.P
+.B List all tokens having word install in the description after 1999-01-01
+.nf
+.RS
+$ token list '.*install.*' --after 1999-01-01
+.RE
+.fi
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.P
+.B Make a grid with cells representing earned tokens
+.nf
+.RS
+$ token itable
+.RE
+.fi
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.P
+.B Plot histogram of earned tokens grouped by week
+.nf
+.RS
+$ token graph --mode week
+.RE
+.fi

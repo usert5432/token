@@ -1,0 +1,4 @@
+include test_color_parser
+include test_config_parser
+include test_token_parser
+include test_graph_constructor

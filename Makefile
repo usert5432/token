@@ -35,7 +35,7 @@ clean:
 
 dist: clean
 	mkdir -p "token-$(VERSION)/"
-	cp -r src/ man/ tests/ "token-$(VERSION)/"
+	cp -r src/ man/ tests/ share/ "token-$(VERSION)/"
 	cp -f Makefile LICENSE README.rst token.nimble "token-$(VERSION)/"
 	tar -c -f "token-$(VERSION).tar" "token-$(VERSION)/"
 	rm -rf "token-$(VERSION)/"

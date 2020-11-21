@@ -1,5 +1,5 @@
 # Package
-version     = "0.1.0"
+version     = "0.1.1"
 author      = "Dmitrii Torbunov"
 description = "A command line token reward system manager"
 license     = "ISC"

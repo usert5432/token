@@ -7,7 +7,6 @@ SOURCES = $(shell find src/ -name '*.nim')
 PREFIX  ?= /usr/local
 DATADIR ?= $(PREFIX)/share
 MANDIR  ?= $(DATADIR)/man
-DISTDIR ?= token-$(VERSION)
 
 NIMFLAGS ?= -d:release
 
@@ -32,12 +31,13 @@ test: $(SOURCES) $(wildcard tests/*.nim)
 
 clean:
 	rm -f token tests/run_tests
-	rm -f $(DISTDIR).tar.gz
+	rm -f token-$(VERSION).tar.gz
 
 dist: clean
-	mkdir -p $(DISTDIR)
-	cp -r src/ man/ tests/ $(DISTDIR)/
-	cp -f Makefile LICENSE README.rst token.nimble $(DISTDIR)/
-	tar -c -f $(DISTDIR).tar --remove-files $(DISTDIR)
-	gzip $(DISTDIR).tar
+	mkdir -p "token-$(VERSION)/"
+	cp -r src/ man/ tests/ "token-$(VERSION)/"
+	cp -f Makefile LICENSE README.rst token.nimble "token-$(VERSION)/"
+	tar -c -f "token-$(VERSION).tar" "token-$(VERSION)/"
+	rm -rf "token-$(VERSION)/"
+	gzip token-$(VERSION).tar
 

@@ -1,0 +1,18 @@
+tokenDir = ~/.token
+pageSize = 200
+
+color.reward.1  = "white"
+color.reward.2  = "darkred"
+color.reward.2  = "red"
+color.reward.3  = "yellow"
+color.reward.4  = "darkgreen"
+color.reward.5  = "green"
+color.reward.6  = "cyan"
+color.reward.7  = "blue"
+color.reward.8  = "blueviolet"
+color.reward.9  = "mediumvioletred"
+color.reward.10 = "bright purple"
+
+color.alt0 = "on black"
+color.alt1 = "on #202020"
+

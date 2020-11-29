@@ -47,8 +47,7 @@ proc printTableHLine(tableSpec : TableSpec) : string =
     )
 
     return (
-        ansiForegroundColorCode(fgWhite)        &
-        tableSpec.borderC                       &
+        tableSpec.borderC &
         repeat(cellSeparator & tableSpec.borderC, tableSpec.nCols)
     )
 

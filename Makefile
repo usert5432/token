@@ -1,7 +1,7 @@
 BIN     = token
 NIMBLE  = nimble
 # Make sure VERSION is aligned with token.nimble
-VERSION = 0.1.1
+VERSION = 0.1.2
 
 SOURCES = $(shell find src/ -name '*.nim')
 
